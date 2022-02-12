@@ -1,0 +1,133 @@
+conky.config = {
+  -- -- Conky settings -- #
+	 --   background = false,
+	    update_interval = 1,
+
+	    cpu_avg_samples = 1,
+	--    net_avg_samples = 2,
+
+	 --   override_utf8_locale = true,
+
+	    double_buffer = true,
+	 --   no_buffers = true,
+
+     -- text_buffer_size = 32768,
+     imlib_cache_size = 0,
+
+  -- -- Window specifications -- #
+	  own_window = true,
+      own_window_type = 'dock',
+      own_window_argb_visual = true,
+      own_window_argb_value = 200,
+	  own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+      own_window_title = 'clicky',
+
+	    border_inner_margin = 20,
+	    border_outer_margin = 0,
+	    
+	    maximum_width = 280,
+	    minimum_height = 840,
+
+	    alignment = 'top_right',
+	    gap_x = 35,
+	    gap_y = 70,
+
+  -- -- Graphics settings -- #
+	    draw_shades = false,
+	    draw_outline = true,
+	    draw_borders = false,
+	    draw_graph_borders = false,
+
+  -- -- Text settings -- #
+	    use_xft = true,
+	    font = 'Ubuntu Mono:size=10',
+	    xftalpha = 0.8,
+      --Ícones: ${font Conky Icons by Carelli:size=14}
+      short_units = true,
+
+	    uppercase = false,
+
+	default_color = '#6C8872',
+	color1 = '#684E38',
+	color2 = '#525347',
+	color3 = '#666B5A',
+	color4 = '#6C8872',
+	color5 = '#8B866D',
+	color6 = '#759B8A',
+	color7 = '#c2cdc3',
+	color8 = '#878f88',
+	color9 = '#684E38',
+
+        own_window_transparent = true,
+
+      --CORRECT THIS PATH
+      lua_load = '~/.config/conky/Conky-Minimalism-master/clocks.lua',
+      lua_draw_hook_pre = 'clock_rings',
+      --lua_load = '~/.conky/minimalism/clicky.lua',
+      --lua_draw_hook_pre = 'main',
+};
+
+conky.text = [[
+${color7}${font :size=14:bold}${alignr}SYSTEM${image ~/void.png -p 150,0 -s 25x25}${font}
+${voffset 5}${color6}OS :$alignr${color5}${execi 6000 lsb_release -d | grep 'Descr'|awk {'print $2 " " $3" " $4" " $5'}}
+${voffset 2}${color6}Kernel :$alignr${color5} $kernel
+${voffset 2}${color6}Uptime :$alignr${color5} $uptime
+${voffset 2}${color6}Processes : ${color5}${processes}${alignr}${color6}Running : ${color5}${running_processes}
+#------------+
+#CPU
+#------------+
+
+${voffset 5}${color7}${font :size=14:bold}${alignr}CPU${image ~/cpu.png -p 160,115 -s 55x35}${font}
+${voffset 5}
+${color5}${execi 6000 cat /proc/cpuinfo | grep 'model name' | sed -e 's/model name.*: //'| uniq | cut -c 1-22}
+${offset -2}${color5}${execi 6000 cat /proc/cpuinfo | grep 'model name' | sed -e 's/model name.*: //'| uniq | cut -c 27-50}
+${voffset 5}${color6}Freq : ${color5}${freq_g} GHz
+${voffset 5}${color6}CPU : ${color5}${hwmon 0 temp 1}°C
+${voffset 5}${color6}GPU : ${color5}${execpi .001 (cat /sys/class/drm/card*/gt_cur_freq_mhz)} MHz ${alignr}${color6}Max. Freq: ${color5}${execpi .001 (cat /sys/class/drm/card*/gt_max_freq_mhz)} MHz
+#------------+
+#CPU CORES
+#------------+
+#------------+
+#TEMPS
+#------------+
+#------------+
+#------------+
+# MEMORY
+#------------+
+${voffset 15}${color7}${font :size=14:bold}${alignr}MEMORY${image ~/memory.png -p 125,275 -s 38x35}${font}
+
+${voffset -5}${alignr}${offset -80}${color6}Swap ${color5}${swap}/${swapmax}
+${alignr}${offset -80}${color6}Used: ${color5}$mem ($memperc%)
+${color6}Free: ${color5}$memeasyfree
+
+
+
+
+
+
+${font}${voffset 5}${color6}Name${goto 180}MEM%${alignr}MEM
+${color5}${top_mem name 1} ${goto 180}${top_mem mem 1}${alignr}${top_mem mem_res 1}${color2}
+${top_mem name 2} ${goto 180}${top_mem mem 2}${alignr}${top_mem mem_res 2}
+${top_mem name 3} ${goto 180}${top_mem mem 3}${alignr}${top_mem mem_res 3}
+#--
+# PROCESSES
+#------------+
+
+${voffset 10}${color7}${font :size=14:bold}${alignr}PROCESSES${font}
+${voffset 5}${font :bold}${color6}Name${goto 180}CPU%${alignr}MEM%
+${color5}${font}${top name 1} ${goto 180}${top cpu 1}${alignr}${top mem 1}${color2}
+${top name 2} ${goto 180}${top cpu 2}${alignr}${top mem 2}
+${top name 3} ${goto 180}${top cpu 3}${alignr}${top mem 3}
+#------------+
+# DISK
+#------------+
+
+${voffset 30}${color7}${font :size=14:bold}${alignr}STORAGE${image ~/hdd.png -p 120,705 -s 41x35}${font}
+# NVME
+${voffset 5}${color6}Used: ${color5}${fs_used /}${color6}${alignr}Free:  ${color5}${fs_free /}
+${color1}${voffset 5}${fs_bar /}
+${voffset 2}${color6}Read: ${color5}${diskio_read nvme0n1}${alignr}${color6}Write:   ${color5}${diskio_write nvme0n1}
+${voffset 2}${color6}Upload: ${color5}${upspeed}${alignr}${color6}Download:   ${color5}${downspeed}
+
+
+]];
